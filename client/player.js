@@ -19,12 +19,14 @@ function preload() {
 }
 
 class Player {
-  constructor(x=0, y=0) {
+  constructor(x=100, y=100, username) {
+    this.username = username || generateRandomUser();
     this.x = x;
     this.y = y;
     this.xdir = 0;
     this.ydir = 0;
-    this.image = options[randomInt(0, 2)];
+    this.type = randomInt(0, 2)
+    this.image = options[this.type];
   }
   
   update(xdir, ydir) {
@@ -35,6 +37,8 @@ class Player {
 
   show() {
     fill(255, 204, 0);
+    textSize(10);
+    text(this.username, this.x + 0, this.y + -20);
     textSize(20);
     text(this.image, this.x, this.y);
     // text('✋');
@@ -45,4 +49,8 @@ class Player {
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function generateRandomUser() {
+  return 'guest_' + (Math.random() + 1).toString(36).substring(7);
 }

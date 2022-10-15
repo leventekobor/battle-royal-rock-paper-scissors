@@ -8,11 +8,11 @@ io.on("connection", socket => {
   console.log("a user connected");
 
   socket.on("message", message => {
-    console.log(message);
+    console.log(message.move);
     //io.emit("message", `${socket.id.substr(0, 2)} moved ${message}`);
     io.emit("message", {
-      'user': socket.id.substr(0, 2),
-      'move': message
+      'user': message.user,
+      'move': message.move
     })
   });
 });

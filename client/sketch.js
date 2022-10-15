@@ -22,16 +22,32 @@ function draw() {
 function keyPressed() {
   if (keyCode === UP_ARROW) {
     //player.update(0, -1);
-    socket.emit("message", [0, -1]);
+    socket.emit("message", {
+      'user': 'Mario',
+      'type': player.type,
+      'move': [0, -1]
+    });
   } else if (keyCode === DOWN_ARROW) {
     //player.update(0, 1);
-    socket.emit("message", [0, 1]);
+    socket.emit("message", {
+      user: player.username,
+      type: player.type,
+      move: [0, 1]
+    });
   } else if (keyCode === RIGHT_ARROW) {
     //player.update(1, 0);
-    socket.emit("message", [1, 0]);
+    socket.emit("message", {
+      user: player.username,
+      type: player.type,
+      move: [1, 0]
+    });
   } else if (keyCode === LEFT_ARROW) {
     //player.update(-1, 0);
-    socket.emit("message", [-1, 0]);
+    socket.emit("message", {
+      user: player.username,
+      type: player.type,
+      move: [-1, 0]
+    });
   }
 }
 
