@@ -21,6 +21,7 @@ function preload() {
 class Player {
   constructor(x=100, y=100, username) {
     this.username = username || generateRandomUser();
+    window.localStorage.setItem('username', this.username);
     this.x = x;
     this.y = y;
     this.xdir = 0;

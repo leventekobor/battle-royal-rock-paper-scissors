@@ -2,10 +2,16 @@ let s;
 let scl = 20;
 let player;
 const socket = io("ws://localhost:8080");
+const username = window.localStorage.getItem('username');
+
 
 function setup() {
   createCanvas(600, 600);
-  player = new Player();
+  if (username) {
+    player = new Player(100, 100, username);
+  } else {
+    player = new Player();
+  }
 }
 
 socket.on("message", coordinates => {
