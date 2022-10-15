@@ -23,11 +23,12 @@ class Player {
   update(xdir, ydir) {
     this.x += xdir;
     this.y += ydir;
+    //socket.emit("message", [this.x, this.y]);
   }
 
   show() {
     fill(255, 204, 0);
-    image(this.image, this.x, this.y);
+    image(this.image, this.x, this.y, 20, 20);
   }
 }
 
