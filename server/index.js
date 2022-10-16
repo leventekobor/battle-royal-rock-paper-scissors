@@ -4,6 +4,8 @@ const io = require("socket.io")(http, {
   cors: { origin: "*" }
 });
 
+
+/*
 io.on("connection", socket => {
   console.log("a user connected");
 
@@ -16,5 +18,37 @@ io.on("connection", socket => {
     })
   });
 });
+*/
+
+io.use((socket, next) => {
+  const username = socket.handshake.auth.username;
+  if (!username) {
+    return next(new Error("invalid username"));
+  }
+  socket.username = username;
+  next();
+});
+
+
+io.on("connection", socket => {
+  console.log("a user connected");
+  const users = [];
+  for (let [id, socket] of io.of("/").sockets) {
+    
+    users.push({
+      userID: id,
+      username: socket.username,
+      startpos: [randomInt(30, 90), randomInt(30, 90)],
+    });
+  }
+  console.log('users', users);
+  socket.emit("users", users);
+});
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+
 
 http.listen(8080, () => console.log("listening on http://localhost:8080"));

@@ -1,8 +1,17 @@
 let s;
 let scl = 20;
 let player;
-const socket = io("ws://localhost:8080");
+
+const socket = io("ws://localhost:8080", { autoConnect: false });
 const username = window.localStorage.getItem('username');
+socket.auth = { username };
+socket.connect();
+
+socket.on("connect_error", err => {
+  if (err.message === "invalid username") {
+    console.log('we are fucked');
+  }
+});
 
 
 function setup() {
@@ -13,6 +22,10 @@ function setup() {
     player = new Player();
   }
 }
+
+socket.on("users", coordinates => {
+  console.log(coordinates);
+});
 
 socket.on("message", coordinates => {
   console.log(coordinates);
