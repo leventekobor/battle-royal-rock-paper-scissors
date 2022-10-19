@@ -20,8 +20,8 @@ function preload() {
 
 class Player {
   constructor(x=100, y=100, username) {
-    this.username = username || generateRandomUser();
-    window.localStorage.setItem('username', this.username);
+    this.username = username;
+    // window.localStorage.setItem('username', this.username);
     this.x = x;
     this.y = y;
     this.xdir = 0;
@@ -50,8 +50,4 @@ class Player {
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function generateRandomUser() {
-  return 'guest_' + (Math.random() + 1).toString(36).substring(7);
 }

@@ -1,11 +1,22 @@
 let s;
 let scl = 20;
 let player;
+let enemies;
+let ready = false;
 
 const socket = io("ws://localhost:8080", { autoConnect: false });
 const username = window.localStorage.getItem('username');
 socket.auth = { username };
 socket.connect();
+
+
+function draw() {
+  if (ready) {
+    background(51);
+    player.update(0, 0);
+    player.show();
+  }
+}
 
 socket.on("connect_error", err => {
   if (err.message === "invalid username") {
@@ -16,27 +27,26 @@ socket.on("connect_error", err => {
 
 function setup() {
   createCanvas(600, 600);
-  if (username) {
-    player = new Player(100, 100, username);
-  } else {
-    player = new Player();
-  }
 }
 
-socket.on("users", coordinates => {
-  console.log(coordinates);
+socket.on("users", players => {
+    for (let i = 0; i < players.length; i++) {
+      let a = new Player(
+        players[i].startpos[0],
+        players[i].startpos[1],
+        players[i].username
+      );
+      enemies.push(a);
+    }
+
+  ready = true;
+  console.log(players);
 });
 
 socket.on("message", coordinates => {
   console.log(coordinates);
   player.update(coordinates.move[0], coordinates.move[1]);
 });
-
-function draw() {
-  background(51);
-  player.update(0, 0);
-  player.show();
-}
 
 function keyPressed() {
   if (keyCode === UP_ARROW) {

@@ -20,10 +20,15 @@ io.on("connection", socket => {
 });
 */
 
+function generateRandomUser() {
+  return "guest_" + (Math.random() + 1).toString(36).substring(7);
+}
+
 io.use((socket, next) => {
-  const username = socket.handshake.auth.username;
-  if (!username) {
-    return next(new Error("invalid username"));
+  let username = socket.handshake.auth.username;
+  console.log('foobar', username);
+  if (username) {
+    username = generateRandomUser()
   }
   socket.username = username;
   next();
@@ -43,6 +48,15 @@ io.on("connection", socket => {
   }
   console.log('users', users);
   socket.emit("users", users);
+  
+  socket.on("message", message => {
+    console.log(message.move);
+    //io.emit("message", `${socket.id.substr(0, 2)} moved ${message}`);
+    io.emit("message", {
+      user: message.user,
+      move: message.move
+    });
+  });
 });
 
 function randomInt(min, max) {
