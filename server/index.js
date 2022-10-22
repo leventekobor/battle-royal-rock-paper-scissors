@@ -27,9 +27,6 @@ io.use((socket, next) => {
   if (!username) {
     return next(new Error("invalid username"));
   }
-  if (users.some(user => user.username === username)) {
-
-  }
   socket.username = username;
   next();
 });
@@ -42,11 +39,13 @@ io.on("connection", socket => {
       users.push({
         userID: id,
         username: socket.username,
-        startpos: [randomInt(30, 90), randomInt(30, 90)]
+        startpos: [randomInt(30, 90), randomInt(30, 90)],
+        type: randomInt(0, 2)
       });
     }
   }
   socket.emit("users", users);
+  socket.broadcast.emit("users", users);
 });
 
 io.on("movement", movement => {

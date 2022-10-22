@@ -22,15 +22,15 @@ function preload() {
   */
 
 class Player {
-  constructor(x=100, y=100, username) {
+  constructor(x=100, y=100, username, type) {
     this.username = username;
     // window.localStorage.setItem('username', this.username);
     this.x = x;
     this.y = y;
     this.xdir = 0;
     this.ydir = 0;
-    this.type = randomInt(0, 2)
-    this.image = options[this.type];
+
+    this.image = options[type];
   }
   
   update(xdir, ydir) {

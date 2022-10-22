@@ -43,22 +43,22 @@ function draw() {
 socket.on("users", players => {
   console.log("getting new players");
   const index = players.findIndex(player => player.username === username);
-  console.log(index);
   player = new Player(
     players[index].startpos[0],
     players[index].startpos[1],
-    username
+    username,
+    players[index].type
   );
   if (index >= 0) {
     players.splice(index, 1);
   }
-  console.log(players);
 
   for (let i = 0; i < players.length; i++) {
     let a = new Player(
       players[i].startpos[0],
       players[i].startpos[1],
-      players[i].username
+      players[i].username,
+      players[i].type
     );
     enemies.push(a);
   }
@@ -81,6 +81,7 @@ socket.on("movement", coordinates => {
 });
 
 function keyPressed() {
+  console.log('doing it');
   if (keyCode === UP_ARROW) {
     //player.update(0, -1);
     socket.emit("movement", {
