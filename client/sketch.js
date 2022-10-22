@@ -20,34 +20,11 @@ const username = window.localStorage.getItem("username") || generateRandomUser()
 socket.auth = { username };
 socket.connect();
 
+
+
 function setup() {
   createCanvas(600, 600);
 }
-
-socket.on("users", players => {
-  console.log(players);
-  const index = players.findIndex(player => player.username === username);
-  console.log(index);
-  player = new Player(
-    players[index].startpos[0],
-    players[index].startpos[1],
-    username
-  );
-  if (index >= 0) {
-    players.splice(index, 1);
-  }
-  console.log(players);
-  
-  for (let i = 0; i < players.length; i++) {
-    let a = new Player(
-      players[i].startpos[0],
-      players[i].startpos[1],
-      players[i].username
-    );
-    enemies.push(a);
-  }
-  ready = true;
-});
 
 function draw() {
   if(ready) {
@@ -62,6 +39,35 @@ function draw() {
     })
   }
 }
+
+socket.on("users", players => {
+  console.log("getting new players");
+  const index = players.findIndex(player => player.username === username);
+  console.log(index);
+  player = new Player(
+    players[index].startpos[0],
+    players[index].startpos[1],
+    username
+  );
+  if (index >= 0) {
+    players.splice(index, 1);
+  }
+  console.log(players);
+
+  for (let i = 0; i < players.length; i++) {
+    let a = new Player(
+      players[i].startpos[0],
+      players[i].startpos[1],
+      players[i].username
+    );
+    enemies.push(a);
+  }
+  ready = true;
+});
+
+socket.onAny((event, ...args) => {
+  console.log(event, args);
+});
 
 socket.on("connect_error", err => {
   if (err.message === "invalid username") {

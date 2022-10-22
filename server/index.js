@@ -24,7 +24,6 @@ const users = [];
 
 io.use((socket, next) => {
   let username = socket.handshake.auth.username;
-  console.log('foobar', username);
   if (!username) {
     return next(new Error("invalid username"));
   }
@@ -47,7 +46,6 @@ io.on("connection", socket => {
       });
     }
   }
-  console.log("users", users);
   socket.emit("users", users);
 });
 
