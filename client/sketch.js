@@ -75,9 +75,17 @@ socket.on("connect_error", err => {
   }
 });
 
-socket.on("movement", coordinates => {
-  console.log(coordinates);
-  player.update(coordinates.move[0], coordinates.move[1]);
+socket.on("movement", movement => {
+  console.log(movement);
+  if(movement.user === username) {
+    player.update(movement.move[0], movement.move[1]);
+  } else {
+    const index = enemies.findIndex(
+      player => player.username === movement.user
+    );
+    enemies[index].update(movement.move[0], movement.move[1]);
+  }
+
 });
 
 function keyPressed() {

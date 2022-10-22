@@ -46,16 +46,18 @@ io.on("connection", socket => {
   }
   socket.emit("users", users);
   socket.broadcast.emit("users", users);
-});
 
-io.on("movement", movement => {
-  console.log(movement.move);
-  //io.emit("message", `${socket.id.substr(0, 2)} moved ${message}`);
-  io.emit("movement", {
-    user: movement.user,
-    move: movement.move
+  socket.on("movement", movement => {
+    console.log(movement.move);
+    //io.emit("message", `${socket.id.substr(0, 2)} moved ${message}`);
+    io.emit("movement", {
+      user: movement.user,
+      move: movement.move
+    });
   });
 });
+
+
 
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
