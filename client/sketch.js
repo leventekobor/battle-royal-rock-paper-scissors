@@ -1,7 +1,7 @@
 let s;
 let scl = 20;
 let player;
-let enemies;
+let enemies = [];
 let ready = false;
 
 function randomInt(min, max) {
@@ -20,12 +20,46 @@ const username = window.localStorage.getItem("username") || generateRandomUser()
 socket.auth = { username };
 socket.connect();
 
+function setup() {
+  createCanvas(600, 600);
+}
+
+socket.on("users", players => {
+  console.log(players);
+  const index = players.findIndex(player => player.username === username);
+  console.log(index);
+  player = new Player(
+    players[index].startpos[0],
+    players[index].startpos[1],
+    username
+  );
+  if (index >= 0) {
+    players.splice(index, 1);
+  }
+  console.log(players);
+  
+  for (let i = 0; i < players.length; i++) {
+    let a = new Player(
+      players[i].startpos[0],
+      players[i].startpos[1],
+      players[i].username
+    );
+    enemies.push(a);
+  }
+  ready = true;
+});
 
 function draw() {
-  if (ready) {
+  if(ready) {
     background(51);
     player.update(0, 0);
     player.show();
+  }
+  if(enemies.length > 0) {
+    enemies.forEach(enemy => {
+      enemy.update(0, 0);
+      enemy.show();
+    })
   }
 }
 
@@ -35,26 +69,7 @@ socket.on("connect_error", err => {
   }
 });
 
-
-function setup() {
-  createCanvas(600, 600);
-}
-
-socket.on("users", players => {
-    for (let i = 0; i < players.length; i++) {
-      let a = new Player(
-        players[i].startpos[0],
-        players[i].startpos[1],
-        players[i].username
-      );
-      enemies.push(a);
-    }
-
-  ready = true;
-  console.log(players);
-});
-
-socket.on("message", coordinates => {
+socket.on("movement", coordinates => {
   console.log(coordinates);
   player.update(coordinates.move[0], coordinates.move[1]);
 });
@@ -62,28 +77,28 @@ socket.on("message", coordinates => {
 function keyPressed() {
   if (keyCode === UP_ARROW) {
     //player.update(0, -1);
-    socket.emit("message", {
-      'user': 'Mario',
-      'type': player.type,
-      'move': [0, -1]
+    socket.emit("movement", {
+      user: player.username,
+      type: player.type,
+      move: [0, -1]
     });
   } else if (keyCode === DOWN_ARROW) {
     //player.update(0, 1);
-    socket.emit("message", {
+    socket.emit("movement", {
       user: player.username,
       type: player.type,
       move: [0, 1]
     });
   } else if (keyCode === RIGHT_ARROW) {
     //player.update(1, 0);
-    socket.emit("message", {
+    socket.emit("movement", {
       user: player.username,
       type: player.type,
       move: [1, 0]
     });
   } else if (keyCode === LEFT_ARROW) {
     //player.update(-1, 0);
-    socket.emit("message", {
+    socket.emit("movement", {
       user: player.username,
       type: player.type,
       move: [-1, 0]

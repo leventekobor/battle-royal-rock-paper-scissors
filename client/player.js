@@ -2,21 +2,24 @@ let paperImg;
 let rockImg;
 let scissorImg;
 let types;
+const options = [(paper = "✋"), (rock = "🤘"), (scissor = "✌️")];
 
-function preload() {
   /*
+function preload() {
+
   types = [
     paperImg = loadImage("assets/paper.jpeg"),
     rockImg = loadImage("assets/rock.jpeg"),
     scissorImg = loadImage("assets/scissor.jpeg"),
   ];
-  */
+
   options = [
     paper = '✋',
     rock = '🤘',
     scissor = '✌️'
   ]
 }
+  */
 
 class Player {
   constructor(x=100, y=100, username) {
@@ -33,7 +36,6 @@ class Player {
   update(xdir, ydir) {
     this.x += xdir;
     this.y += ydir;
-    //socket.emit("message", [this.x, this.y]);
   }
 
   show() {
