@@ -4,8 +4,19 @@ let player;
 let enemies;
 let ready = false;
 
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function generateRandomUser() {
+  const username =
+    "guestClient_" + (Math.random() + 1).toString(36).substring(7);
+    window.localStorage.setItem("username", username);
+  return username;
+}
+
 const socket = io("ws://localhost:8080", { autoConnect: false });
-const username = window.localStorage.getItem('username');
+const username = window.localStorage.getItem("username") || generateRandomUser();
 socket.auth = { username };
 socket.connect();
 
