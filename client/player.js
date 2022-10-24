@@ -1,25 +1,4 @@
-let paperImg;
-let rockImg;
-let scissorImg;
-let types;
 const options = [(paper = "✋"), (rock = "🤘"), (scissor = "✌️")];
-
-  /*
-function preload() {
-
-  types = [
-    paperImg = loadImage("assets/paper.jpeg"),
-    rockImg = loadImage("assets/rock.jpeg"),
-    scissorImg = loadImage("assets/scissor.jpeg"),
-  ];
-
-  options = [
-    paper = '✋',
-    rock = '🤘',
-    scissor = '✌️'
-  ]
-}
-  */
 
 class Player {
   constructor(x=100, y=100, username, type) {
@@ -29,13 +8,22 @@ class Player {
     this.y = y;
     this.xdir = 0;
     this.ydir = 0;
-
+    this.xspeed = 1;
+    this.yspeed = 0;
     this.image = options[type];
   }
   
-  update(xdir, ydir) {
-    this.x += xdir;
-    this.y += ydir;
+  dir(x, y) {
+    this.xspeed = x;
+    this.yspeed = y;
+  };
+
+  update() {
+    this.x = this.x + this.xspeed * scl;
+    this.y = this.y + this.yspeed * scl;
+
+    this.x = constrain(this.x, 0, width - scl);
+    this.y = constrain(this.y, 0, height - scl);
   }
 
   show() {
@@ -44,12 +32,11 @@ class Player {
     text(this.username, this.x + 0, this.y + -20);
     textSize(20);
     text(this.image, this.x, this.y);
-    // text('✋');
-    // text('✌️');
-    //image(this.image, this.x, this.y, 20, 20);
+    stroke("green");
+    rect(this.x, this.y, 20, -20);
   }
 }
 
 function randomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
+  return Math.floor(Math.random() * (max - m7in + 1) + min);
 }

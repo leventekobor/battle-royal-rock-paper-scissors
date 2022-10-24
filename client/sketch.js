@@ -4,10 +4,6 @@ let player;
 let enemies = [];
 let ready = false;
 
-function randomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
 function generateRandomUser() {
   const username =
     "guestClient_" + (Math.random() + 1).toString(36).substring(7);
@@ -20,10 +16,9 @@ const username = window.localStorage.getItem("username") || generateRandomUser()
 socket.auth = { username };
 socket.connect();
 
-
-
 function setup() {
   createCanvas(600, 600);
+  frameRate(10);
 }
 
 function draw() {
@@ -43,6 +38,7 @@ function draw() {
 socket.on("users", players => {
   console.log("getting new players");
   const index = players.findIndex(player => player.username === username);
+  console.log(index);
   player = new Player(
     players[index].startpos[0],
     players[index].startpos[1],
@@ -78,18 +74,17 @@ socket.on("connect_error", err => {
 socket.on("movement", movement => {
   console.log(movement);
   if(movement.user === username) {
-    player.update(movement.move[0], movement.move[1]);
+    player.dir(movement.move[0], movement.move[1]);
+    player.update();
   } else {
     const index = enemies.findIndex(
       player => player.username === movement.user
     );
-    enemies[index].update(movement.move[0], movement.move[1]);
+    enemies[index].dir(movement.move[0], movement.move[1]);
   }
-
 });
 
 function keyPressed() {
-  console.log('doing it');
   if (keyCode === UP_ARROW) {
     //player.update(0, -1);
     socket.emit("movement", {
