@@ -3,7 +3,6 @@ const options = [(paper = "✋"), (rock = "🤘"), (scissor = "✌️")];
 class Player {
   constructor(x=100, y=100, username, type) {
     this.username = username;
-    // window.localStorage.setItem('username', this.username);
     this.x = x;
     this.y = y;
     this.xdir = 0;
@@ -32,8 +31,6 @@ class Player {
     text(this.username, this.x + 0, this.y + -20);
     textSize(20);
     text(this.image, this.x, this.y);
-    stroke("green");
-    rect(this.x, this.y, 20, -20);
   }
 }
 
