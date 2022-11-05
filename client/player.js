@@ -26,6 +26,7 @@ class Player {
   }
 
   show() {
+    rect(this.x, this.y + 2, 20, -19);
     fill(255, 204, 0);
     textSize(10);
     text(this.username, this.x + 0, this.y + -20);

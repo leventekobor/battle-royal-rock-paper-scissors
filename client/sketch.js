@@ -1,5 +1,5 @@
 let s;
-let scl = 20;
+let scl = 5;
 let player;
 let enemies = [];
 let ready = false;
@@ -18,7 +18,7 @@ socket.connect();
 
 function setup() {
   createCanvas(600, 600);
-  frameRate(10);
+  frameRate(30);
 }
 
 function draw() {
@@ -50,13 +50,13 @@ socket.on("users", players => {
   }
 
   for (let i = 0; i < players.length; i++) {
-    let a = new Player(
+    let enemy = new Player(
       players[i].startpos[0],
       players[i].startpos[1],
       players[i].username,
       players[i].type
     );
-    enemies.push(a);
+    enemies.push(enemy);
   }
   ready = true;
 });
@@ -72,10 +72,17 @@ socket.on("connect_error", err => {
 });
 
 socket.on("movement", movement => {
-  console.log(movement);
+  console.log(enemies);
+
   if(movement.user === username) {
-    player.dir(movement.move[0], movement.move[1]);
-    player.update();
+    if(intersectEnemy()) {
+      player.dir(movement.move[0], movement.move[1]);
+      player.update();
+    } else {
+      alert('foo')
+            player.dir(movement.move[0], movement.move[1]);
+            player.update();
+    }
   } else {
     const index = enemies.findIndex(
       player => player.username === movement.user
@@ -114,5 +121,22 @@ function keyPressed() {
       move: [-1, 0]
     });
   }
+}
+
+function intersectEnemy() {
+  if (enemies.length < 2) {
+    return true;
+  } 
+  // If one rectangle is on left side of other
+  if (player.x > enemies[1]?.x + 20 || enemies[1]?.x > player.x + 20) {
+    console.log("case1");
+    return false;
+  }
+  // If one rectangle is above other
+  if (player.y - 20 > enemies[1]?.y || enemies[1]?.y - 20 > player.y) {
+    console.log("case2");
+    return false;
+  }
+  return true;
 }
 
